@@ -1,46 +1,10 @@
-# 暑假大作战题目要求
----
-
-## 必做任务
-- 抓取学校[创新创业教育学院官网](https://cxcy.njupt.edu.cn/ "就是这个") 的“通知公告”版块，提取出前五条通知的标题、发布日期、详情页完整URL
-  - 使用`requests + BeautifulSoup`, 或使用`Scrapy`
-  - 添加`headers`和延时
-  - 提取的详情页链接拼接为绝对路径，可使用`urljoin`
-- 数据格式化输出为本地文件(如 CSV、JSON 等)
-
-## 可选任务
-- 向你的个人邮箱推送通知汇总
-  - 邮件正文包含标题、发布日期、链接
-  - 使用`smtplib`和`email`库，支持`SMTP_SSL`加密连接
-  - 不要把发件人邮箱、授权码、收件人邮箱提交上来，记得使用`.env`文件并`.gitignore`掉它们
-
----
-## 简单例子
-### requests + BeautifulSoup
-1. 安装依赖 如果不用lxml,也可以使用Python内置的`html.parser`
-```bash
-pip install beautifulsoup4 requests lxml
-```
-
-2. 创建 `main.py` 爬取网站以 Bing 为例
-```python
-from bs4 import BeautifulSoup
-import requests
-
-url = 'https://cn.bing.com/'
-
-response = requests.get(url)
-response.encoding = 'utf-8' 
-
-if response.status_code == 200:
-    soup = BeautifulSoup(response.text, 'lxml')
-    title_tag = soup.find('title')
-    if title_tag:
-        print(title_tag.get_text())
-    else:
-        print("未找到<title>标签")
-else:
-    print("请求失败，状态码：", response.status_code)
-```
-
-3. 运行，输出为`搜索 - Microsoft 必应` 
+这里是程序的使用说明
+本程序分为以下几个模块：
+1.主程序（操作台）operationdesk。用于与用户交互，同时也是这些模块的处理中枢
+2.爬虫spid。用于爬取信息并以列表嵌套字典的形式返回数据
+3.保存saver。保存spid的数据，同时输出data.csv和data.json
+4.邮件发送模块emailsender。推送邮件。
+    #注意：此模块仅支持qq邮箱作为发件人，运行程序时需要读取环境变量中的信息，所以在运行此程序时要提前编辑env文件，发件人，收件人，授权码等信息分别用'EMAIL_SENDER','EMAIL_RECEIVER','EMAIL_AUTH_CODE'储存。
+5.定时推送模块scheduled_email，定时每天17:00推送，如有变动，请在程序中修改。
+6.data。有csv和JSON两种格式，均为编写代码时本地产生的运行结果，以供参考。
+7.requirements。整合了运行本程序需要的所有配置库。
