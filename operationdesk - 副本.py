@@ -12,54 +12,55 @@ import scheduled_email
 
 def start_order():
     while True:
-        choice = input("您是否想要启动爬虫系统？（输入 ‘是’ 或 ‘否’）：")
-        if choice == '是':
-            print("收到指令，程序即将启动！")
-            time.sleep(1)
-            try:
-                data = spid.run_spider()  # 假设这里可能会抛出异常
+    #通过while True语句搭建无限循环，提供错误输入指令后重新启动的机会，更为便捷
+            choice = input("您是否想要启动爬虫系统？（输入 ‘是’ 或 ‘否’）：") #.strip()
+            if choice == '是':
+                print("收到指令，程序即将启动！")
+                time.sleep(1)
+                # 调用爬虫模块的主函数
+                data  = spid.run_spider()
                 if data:
-                    return True, data, "爬虫任务顺利完成。"
+                    feedback = "爬虫任务顺利完成。"
+                    print(feedback)
+                    return data,feedback
                 else:
-                    return False, None, "爬虫任务未完成，请查看上方错误信息。"
-            except Exception as e:
-                # 捕获爬虫模块可能抛出的异常
-                return False, None, f"爬虫执行出错: {e}"
-        elif choice == '否':
-            return False, None, "已取消操作，程序退出。"
-        else:
-            print("输入无效，请重新输入 ‘是’ 或 ‘否’。")
-            time.sleep(3)
+                    feedback = "爬虫任务未完成，请查看上方错误信息。"
+                    print(feedback)
+                    return None,feedback
+    # 执行后退出循环（也可以询问是否继续）
+            elif choice == '否':
+                print(" 已取消操作，程序退出。")
+                return None,"已取消操作，程序退出。"
+            else:
+                print("输入无效，请重新输入 ‘是’ 或 ‘否’。")
+                time.sleep(3)
 
-# 修改 save_order()，利用返回的状态和数据
 def save_order():
-    success, data, message = start_order()
-    if not success:
-        print(message)  # 打印失败信息
-        print("后续操作终止。")
-        return
-
-    # 爬虫成功，继续后续操作
-    print('\n' + '=' * 50)
-    time.sleep(1.5)
-    while True:
-        choice = input("您是否想要保存数据？（输入 ‘是’ 或 ‘否’）：")
-        if choice == '是':
-            print("收到指令，程序即将启动！")
-            time.sleep(1)
-            save_all(data, 'data.csv', 'data.json')
-            print('数据已保存，文件名为data.csv和data.json')
-            break
-        elif choice == '否':
-            print("已取消操作，程序退出。")
-            break
-        else:
-            print("输入无效，请重新输入 ‘是’ 或 ‘否’。")
-            time.sleep(3)
+    data, feedback = start_order()
+    if feedback == "爬虫任务顺利完成。":
+        print('\n'+'='*50)
+        time.sleep(1.5)
+        while True:
+            choice = input("您是否想要保存数据？（输入 ‘是’ 或 ‘否’）：") #.strip()
+            if choice == '是':
+                print("收到指令，程序即将启动！")
+                time.sleep(1)
+               
+                save_all(data,'data.csv','data.json')
+                print ('数据已保存，文件名为data.csv和data.json')
+                break
+            elif choice == '否':
+                print(" 已取消操作，程序退出。")
+                break
+            else:
+                print("输入无效，请重新输入 ‘是’ 或 ‘否’。")
+                time.sleep(3)
+    else:
+        print("爬虫任务未完成，无法保存数据,后续所有操作就此终止。")
 
 def email_send_order():
-    success, data, message = start_order()
-    if success:
+    data, feedback = start_order()
+    if feedback == "爬虫任务顺利完成。":
         print('\n'+'='*50)
         time.sleep(1.5)
         while True:
@@ -81,8 +82,8 @@ def email_send_order():
         print("爬虫任务未完成，无法发送邮件。")
 
 def scheduled_email_order():
-    success, data, message = start_order()
-    if success:
+    data, feedback = start_order()
+    if feedback == "爬虫任务顺利完成。":
         print('\n'+'='*50)
         time.sleep(1.5)
         while True:
