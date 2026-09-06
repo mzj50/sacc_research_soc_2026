@@ -11,13 +11,6 @@ import emailsender
 import scheduled_email
 
 def start_order():
-    print('\n'+'='*50)
-    time.sleep(1.5)
-    print('''尊敬的操作员：
-    您好！
-    欢迎来到操作总台，在这里输入操作指令，即可启动整个爬虫和保存程序。
-    接下来，我将聆听您的指令。''')
-    time.sleep(3)
     while True:
     #通过while True语句搭建无限循环，提供错误输入指令后重新启动的机会，更为便捷
             choice = input("您是否想要启动爬虫系统？（输入 ‘是’ 或 ‘否’）：") #.strip()
@@ -62,6 +55,8 @@ def save_order():
             else:
                 print("输入无效，请重新输入 ‘是’ 或 ‘否’。")
                 time.sleep(3)
+    else:
+        print("爬虫任务未完成，无法保存数据,后续所有操作就此终止。")
 
 def email_send_order():
     data, feedback = start_order()
@@ -83,6 +78,8 @@ def email_send_order():
             else:
                 print("输入无效，请重新输入 ‘是’ 或 ‘否’。")
                 time.sleep(3)
+    else:
+        print("爬虫任务未完成，无法发送邮件。")
 
 def scheduled_email_order():
     data, feedback = start_order()
@@ -104,12 +101,21 @@ def scheduled_email_order():
             else:
                 print("输入无效，请重新输入 ‘是’ 或 ‘否’。")
                 time.sleep(3)
+    else:
+        print("爬虫任务未完成，无法设置定时发送邮件。")
 
 
 
 # 当直接运行此文件时，启动交互
 if __name__ == "__main__":
     # 可以选择运行哪个功能
+    print('\n'+'='*50)
+    time.sleep(1.5)
+    print('''尊敬的操作员：
+    您好！
+    欢迎来到操作总台，在这里输入操作指令，即可启动整个爬虫和保存程序。
+    接下来，我将聆听您的指令。''')
+    time.sleep(3)
     print("请选择功能：")
     print("1. 仅爬取数据")
     print("2. 爬取并保存数据")
